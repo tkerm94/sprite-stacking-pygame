@@ -1,3 +1,6 @@
+import os
+import re
+import sys
 from pathlib import Path
 
 import pygame
@@ -7,8 +10,78 @@ vec2 = pygame.math.Vector2
 info = pygame.display.Info()
 RES = WIDTH, HEIGHT = vec2(info.current_w, info.current_h)
 CENTER = H_WIDTH, H_HEIGHT = RES // 2
+TILE_SIZE = 250
+PLAYER_SPEED = 0.4
+PLAYER_ROT_SPEED = 0.002
+BG_COLOR = (106, 145, 35)
+MENU_COLOR = (244, 243, 215)
+MENU_ALT_COLOR = (11, 11, 11)
 NUM_ANGLES = 180
-
+PLAYER_HP, ENEMY_HP = 5, 3
+MUSIC_VOLUME = 50
+SFX_VOLUME = 50
+if not os.path.isdir("data"):
+    os.mkdir("data")
+if os.path.isfile(Path("data/settings.txt")):
+    with open(Path("data/settings.txt"), "r") as file:
+        for line in file.readlines():
+            key, val = line.split()
+            if key == "MUSIC_VOLUME":
+                MUSIC_VOLUME = int(val)
+            elif key == "SFX_VOLUME":
+                SFX_VOLUME = int(val)
+else:
+    with open(Path("data/settings.txt"), "w") as file:
+        file.write(f"MUSIC_VOLUME {MUSIC_VOLUME}\nSFX_VOLUME {SFX_VOLUME}\n")
+SOUNDS = {
+    "shot": pygame.mixer.Sound(Path("assets/sounds/shot.ogg")),
+    "explosion": pygame.mixer.Sound(Path("assets/sounds/explosion.wav")),
+    "walking": pygame.mixer.Sound(Path("assets/sounds/walking.wav")),
+    "sprinting": pygame.mixer.Sound(Path("assets/sounds/sprinting.wav")),
+    "door": pygame.mixer.Sound(Path("assets/sounds/door.wav")),
+    "box": pygame.mixer.Sound(Path("assets/sounds/box.wav")),
+    "coin": pygame.mixer.Sound(Path("assets/sounds/coin.wav")),
+    "damage": pygame.mixer.Sound(Path("assets/sounds/damage.ogg")),
+    "death": pygame.mixer.Sound(Path("assets/sounds/death.wav")),
+    "heal": pygame.mixer.Sound(Path("assets/sounds/heal.wav")),
+}
+for name, sound in SOUNDS.items():
+    sound.set_volume(SFX_VOLUME / 100)
+pygame.mixer.music.set_volume(MUSIC_VOLUME / 100)
+CHANNELS = {
+    "walking": pygame.mixer.Channel(2),
+    "sprinting": pygame.mixer.Channel(3),
+    "enemy_walking": pygame.mixer.Channel(4),
+}
+MENU_ANIMATIONS_ATTRS = {
+    "main_menu": {
+        "path": Path("assets/menu_animations/main_menu.png"),
+        "num_layers": 8,
+        "scale": 20,
+    },
+    "pause_menu": {
+        "path": Path("assets/menu_animations/pause_menu.png"),
+        "num_layers": 4,
+        "scale": 15,
+    },
+    "win_menu": {
+        "path": Path("assets/menu_animations/win_menu.png"),
+        "num_layers": 4,
+        "scale": 20,
+    },
+    "lose_menu": {
+        "path": Path("assets/menu_animations/lose_menu.png"),
+        "num_layers": 4,
+        "scale": 20,
+    },
+}
+ICONS = {
+    "health": Path("assets/icons/health.png"),
+    "coins": Path("assets/icons/coins.png"),
+    "level": Path("assets/icons/level.png"),
+    "reloading": Path("assets/icons/reloading.png"),
+    "sprinting": Path("assets/icons/sprinting.png"),
+}
 ENTITY_SPRITE_ATTRS = {
     "player": {
         "walking": Path("assets/entities/player/player_walking.png"),
@@ -54,7 +127,6 @@ ENTITY_SPRITE_ATTRS = {
         "y_offset": -30,
     },
 }
-# сложенные спрайты
 STACKED_SPRITE_ATTRS = {
     "coin": {
         "path": Path("assets/stacked_sprites/coin.png"),
@@ -102,3 +174,43 @@ STACKED_SPRITE_ATTRS = {
         "y_offset": 10,
     },
 }
+OBJECTS = {
+    "P": "player",
+    "E": "enemy",
+    "D": "door",
+    "R": "tree",
+    "G": "grass",
+    "B": "box",
+    "W": "wall",
+    "T": "tower",
+    "C": "coin",
+    "M": "medkit",
+}
+LEVELS = []
+level_path = Path("assets/levels")
+path_list = []
+for path in os.listdir(level_path):
+    path = os.path.join(level_path, path)
+    if os.path.isfile(path) and re.match("^level_[0-9]+\.txt$", os.path.split(path)[1]):  # type: ignore
+        path_list.append(path)
+path_list = sorted(
+    path_list, key=lambda x: int(os.path.split(x)[1].split("_")[-1].strip(".txt"))
+)
+for path in path_list:
+    with open(path, "r") as file:
+        level = [line.strip().split() for line in file]
+    if level:
+        LEVELS.append(level)
+if not LEVELS:
+    print("No levels in folder")
+    sys.exit(1)
+SAVES = dict()
+save_path = Path("data/saves")
+path_list = []
+if os.path.isdir(save_path):
+    for path in os.listdir(save_path):
+        path = os.path.join(save_path, path)
+        if os.path.isfile(path) and re.match("^.+\.txt$", os.path.split(path)[1]):  # type: ignore
+            SAVES[os.path.split(path)[1][:-4]] = path
+else:
+    os.mkdir(save_path)
