@@ -26,8 +26,11 @@ F - shoot
 
 ** Credits
 [[https://youtube.com/watch?v=HcRWqchSZOE][This guy on youtube]] - Thanks for showing how to implement the sprite stacking technique in pygame!
+
 [[https://penzilla.itch.io/protagonist-character][Link]] - Awesome character animations!
+
 [[https://shikashipx.itch.io/shikashis-fantasy-icons-pack][Link]] - Awesome icons!
+
 And thanks to all creators of the sounds I used in the game! Links:
 - [[https://freesound.org/people/smill.and.welson/sounds/710312/][Shooting sound]]
 - [[https://freesound.org/people/Robinhood76/sounds/65988/][Explosion sound]]
