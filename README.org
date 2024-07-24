@@ -1,0 +1,43 @@
+* sprite-stacking-pygame
+You wake up in some place surrounded by impenetrable walls, with a gun in your hand and you don't remember anything. You start walking around and collecting coins, after you have collected the last one, you hear the sound of a door unlocking. You walk through that door, teleport to the same spot with a different arrangement of items and... ALIENS?!?!?... WITH GUNS?!?!?
+
+** Installation and launching
+First, clone the project and navigate to the project folder:
+#+begin_src zsh
+git clone https://github.com/tkerm94/sprite-stacking-pygame && cd sprite-stacking-pygame
+#+end_src
+Then you will need to install the =pygame= and =Pillow= libraries, they are defined in the requirements.txt file, so just run this command:
+#+begin_src zsh
+pip install -r requirements.txt
+#+end_src
+Then just run the =main.py= file, you can do this with this command:
+#+begin_src zsh
+python main.py
+#+end_src
+#+begin_quote
+Controls:
+
+WASD - move around (sprint with SHIFT)
+
+Q and E - rotate camera
+
+F - shoot
+#+end_quote
+
+** Credits
+[[https://youtube.com/watch?v=HcRWqchSZOE][This guy on youtube]] - Thanks for showing how to implement the sprite stacking technique in pygame!
+[[https://penzilla.itch.io/protagonist-character][Link]] - Awesome character animations!
+[[https://shikashipx.itch.io/shikashis-fantasy-icons-pack][Link]] - Awesome icons!
+And thanks to all creators of the sounds I used in the game! Links:
+- [[https://freesound.org/people/smill.and.welson/sounds/710312/][Shooting sound]]
+- [[https://freesound.org/people/Robinhood76/sounds/65988/][Explosion sound]]
+- [[https://freesound.org/people/IENBA/sounds/702399/][Footsteps and sprinting sound]]
+- [[https://freesound.org/people/MrAuralization/sounds/158625/][Door unlocking sound]]
+- [[https://freesound.org/people/kevinkace/sounds/66777/][Box breaking sound]]
+- [[https://freesound.org/people/cabled_mess/sounds/350876/][Coin pickup sound]]
+- [[https://freesound.org/people/MortisBlack/sounds/385046/][Damage sound]]
+- [[https://freesound.org/people/original_sound/sounds/376818/][Death sound]]
+- [[https://freesound.org/people/ryusa/sounds/531112/][Healing sound]]
+- [[https://freesound.org/people/BloodPixelHero/sounds/612084/][Main theme]]
+- [[https://freesound.org/people/BloodPixelHero/sounds/646407/][Losing theme]]
+- [[https://freesound.org/people/BloodPixelHero/sounds/616791/][Win theme]]
